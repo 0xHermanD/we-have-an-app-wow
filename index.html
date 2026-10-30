@@ -84,7 +84,12 @@ body{font-family:Inter,sans-serif;font-size:13px;color:var(--t1);background:var(
 .vpill.rl{background:var(--goldd);color:var(--gold);border:0.5px solid rgba(201,164,53,.3)}
 .vpill.par{background:var(--accg);color:var(--acc);border:0.5px solid rgba(124,111,224,.25)}
 .sbs{padding:8px 0 3px}
-.sbl{font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:0 12px 4px}
+.sbl{font-size:9px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:0 12px 4px;cursor:pointer;display:flex;align-items:center;gap:4px;user-select:none}
+.sbl:hover{color:var(--t2)}
+.sbl:hover .sec-chev{color:var(--t1)}
+.sbl .sec-chev{font-size:10px;line-height:1;color:var(--t2);transition:transform .15s;flex-shrink:0;display:inline-block;width:10px;text-align:center}
+.sbs.collapsed .sbl .sec-chev{transform:rotate(-90deg)}
+.sbs.collapsed .ni{display:none}
 .ni{display:flex;align-items:center;gap:8px;padding:5px 12px;cursor:pointer;font-size:12px;color:var(--t2);border-left:2px solid transparent;transition:all .13s;position:relative;white-space:nowrap}
 .ni:hover{background:rgba(255,255,255,.025);color:var(--t1)}
 .ni.active{background:linear-gradient(90deg,rgba(124,111,224,.09),transparent);color:var(--t1);border-left-color:var(--acc);font-weight:500}
@@ -94,7 +99,7 @@ body{font-family:Inter,sans-serif;font-size:13px;color:var(--t1);background:var(
 .main{flex:1;overflow:auto;background:var(--bg0)}
 .main::-webkit-scrollbar{width:5px}
 .main::-webkit-scrollbar-thumb{background:var(--bg3);border-radius:3px}
-.content{padding:22px 26px 50px;max-width:1080px}
+.content{padding:22px 26px 50px;max-width:100%}
 .page{display:none}.page.active{display:block}
 /* PAGE HEADER */
 .ph{margin-bottom:18px}
@@ -455,6 +460,16 @@ tr:hover td{background:rgba(255,255,255,.013)}
       <div class="ni" onclick="nav(this,'profiles')"><i class="ti ti-user-circle"></i><span>Profiles</span></div>
       <div class="ni" onclick="nav(this,'stats')"><i class="ti ti-chart-bar"></i><span>Statistics</span></div>
     </div>
+    <div class="sbs tbc-raids"><div class="sbl">TBC Raids</div>
+      <div class="ni" onclick="nav(this,'gruul')"><i class="ti ti-sword"></i><span>Gruul's Lair</span></div>
+      <div class="ni" onclick="nav(this,'mag')"><i class="ti ti-flame"></i><span>Magtheridon</span></div>
+      <div class="ni" onclick="nav(this,'tk')"><i class="ti ti-bolt"></i><span>Tempest Keep</span></div>
+      <div class="ni" onclick="nav(this,'ssc')"><i class="ti ti-droplet"></i><span>Serpent Shrine</span></div>
+      <div class="ni" onclick="nav(this,'kara')"><i class="ti ti-building-castle"></i><span>Karazhan</span></div>
+      <div class="ni" onclick="nav(this,'hyjal')"><i class="ti ti-mountain"></i><span>Mount Hyjal</span></div>
+      <div class="ni" onclick="nav(this,'bt')"><i class="ti ti-building-castle"></i><span>Black Temple</span></div>
+      <div class="ni" onclick="nav(this,'za')"><i class="ti ti-feather"></i><span>Zul'Aman</span></div>
+    </div>
   </div>
 
   <div id="nav-guest" style="display:none">
@@ -489,6 +504,16 @@ tr:hover td{background:rgba(255,255,255,.013)}
     <div class="sbs"><div class="sbl">My Account</div>
       <div class="ni" onclick="nav(this,'profiles');goMyProfile()"><i class="ti ti-user-circle"></i><span>Profile</span></div>
     </div>
+    <div class="sbs tbc-raids"><div class="sbl">TBC Raids</div>
+      <div class="ni" onclick="nav(this,'gruul')"><i class="ti ti-sword"></i><span>Gruul's Lair</span></div>
+      <div class="ni" onclick="nav(this,'mag')"><i class="ti ti-flame"></i><span>Magtheridon</span></div>
+      <div class="ni" onclick="nav(this,'tk')"><i class="ti ti-bolt"></i><span>Tempest Keep</span></div>
+      <div class="ni" onclick="nav(this,'ssc')"><i class="ti ti-droplet"></i><span>Serpent Shrine</span></div>
+      <div class="ni" onclick="nav(this,'kara')"><i class="ti ti-building-castle"></i><span>Karazhan</span></div>
+      <div class="ni" onclick="nav(this,'hyjal')"><i class="ti ti-mountain"></i><span>Mount Hyjal</span></div>
+      <div class="ni" onclick="nav(this,'bt')"><i class="ti ti-building-castle"></i><span>Black Temple</span></div>
+      <div class="ni" onclick="nav(this,'za')"><i class="ti ti-feather"></i><span>Zul'Aman</span></div>
+    </div>
   </div>
   <div id="nav-officer" style="display:none">
     <div class="sbs"><div class="sbl">Schedule</div>
@@ -505,6 +530,16 @@ tr:hover td{background:rgba(255,255,255,.013)}
       <div class="ni" onclick="nav(this,'profiles')"><i class="ti ti-user-circle"></i><span>Profiles</span></div>
       <div class="ni" onclick="nav(this,'coc')"><i class="ti ti-scale"></i><span>Code of Conduct</span></div>
       <div class="ni" onclick="nav(this,'quests')"><i class="ti ti-target-arrow"></i><span>Quest Board</span></div>
+    </div>
+    <div class="sbs tbc-raids"><div class="sbl">TBC Raids</div>
+      <div class="ni" onclick="nav(this,'gruul')"><i class="ti ti-sword"></i><span>Gruul's Lair</span></div>
+      <div class="ni" onclick="nav(this,'mag')"><i class="ti ti-flame"></i><span>Magtheridon</span></div>
+      <div class="ni" onclick="nav(this,'tk')"><i class="ti ti-bolt"></i><span>Tempest Keep</span></div>
+      <div class="ni" onclick="nav(this,'ssc')"><i class="ti ti-droplet"></i><span>Serpent Shrine</span></div>
+      <div class="ni" onclick="nav(this,'kara')"><i class="ti ti-building-castle"></i><span>Karazhan</span></div>
+      <div class="ni" onclick="nav(this,'hyjal')"><i class="ti ti-mountain"></i><span>Mount Hyjal</span></div>
+      <div class="ni" onclick="nav(this,'bt')"><i class="ti ti-building-castle"></i><span>Black Temple</span></div>
+      <div class="ni" onclick="nav(this,'za')"><i class="ti ti-feather"></i><span>Zul'Aman</span></div>
     </div>
   </div>
   </div><!-- end sb-nav -->
@@ -8678,6 +8713,30 @@ function mobNav(page){
     ({attendance:renderAttendance,roster:renderRoster,roles:renderRoles,dispels:renderDispels,res:renderRes,buffs:renderBuffs,coc:renderCoC,quests:renderQuests,pov:renderPOV,specreq:renderSpecReq,signup:renderSignup,'rl-review':renderRLReview,calendar:renderCalendar,raids:renderRaids,'create-raid':renderCreateRaid,leave:renderLeave,gruul:()=>renderBossPage('gruul'),mag:()=>renderBossPage('mag'),tk:()=>renderBossPage('tk'),ssc:()=>renderBossPage('ssc'),kara:()=>renderBossPage('kara'),hyjal:()=>renderBossPage('hyjal'),bt:()=>renderBossPage('bt'),za:()=>renderBossPage('za'),stats:renderStats,profiles:renderProfiles,progression:renderProgression,'guild-effort':renderGuildEffort})[page]?.();
   }
 }
+// ── Collapsible sidebar sections ──────────────────────────────────────
+function toggleNavSection(sbl){
+  const sbs=sbl.closest('.sbs'); if(!sbs) return;
+  const collapsed=sbs.classList.toggle('collapsed');
+  const label=(sbl.querySelector('.sbl-text')?.textContent||sbl.textContent||'').trim();
+  try{
+    const s=new Set(JSON.parse(localStorage.getItem('whaapp-navcollapsed')||'[]'));
+    if(collapsed) s.add(label); else s.delete(label);
+    localStorage.setItem('whaapp-navcollapsed',JSON.stringify([...s]));
+  }catch(e){}
+}
+function initCollapsibleNav(){
+  let saved;
+  try{ saved=JSON.parse(localStorage.getItem('whaapp-navcollapsed')||'null'); }catch(e){ saved=null; }
+  if(!Array.isArray(saved)) saved=['TBC Raids']; // default: TBC Raids collapsed
+  document.querySelectorAll('.sb-nav .sbl').forEach(sbl=>{
+    if(sbl.dataset.coll) return;
+    sbl.dataset.coll='1';
+    const label=sbl.textContent.trim();
+    sbl.innerHTML=`<span class="sec-chev">▾</span><span class="sbl-text">${label}</span>`;
+    sbl.addEventListener('click',()=>toggleNavSection(sbl));
+    if(saved.includes(label)) sbl.closest('.sbs')?.classList.add('collapsed');
+  });
+}
 function initSwipeGesture(){
   let startX=0,startY=0;
   const EDGE=40,THRESHOLD=60;
@@ -8809,6 +8868,7 @@ window.onload=function(){
   // Initialise app — Firebase SDK listeners fire within ~100ms and update all views
   if(window.innerWidth<=768) collapseSidebar();
   initSwipeGesture();
+  initCollapsibleNav();
   // seedRaids(); // disabled for the We Have An App relaunch — raids start empty; RL creates new ones
   initFirebaseSync(); // connects via WebSocket; each key fires on('value') with live data
   initTheme();
