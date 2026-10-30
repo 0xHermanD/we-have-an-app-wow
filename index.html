@@ -364,7 +364,8 @@ tr:hover td{background:rgba(255,255,255,.013)}
         <i class="ti ti-circle-check"></i> Application submitted! The RL will check your gear and get back to you.
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-        <div class="fg" style="flex:1;min-width:130px"><span class="fl">Character Name</span><input id="gs-name" placeholder="Your in-game name"></div>
+        <div class="fg" style="min-width:100px"><span class="fl">First name</span><input id="gs-first" placeholder="First"></div>
+        <div class="fg" style="min-width:100px"><span class="fl">Last name</span><input id="gs-last" placeholder="Last (optional)"></div>
         <div class="fg"><span class="fl">Class</span><select id="gs-cls" onchange="updateGSSpecs()"><option>Druid</option><option>Hunter</option><option>Mage</option><option>Paladin</option><option>Priest</option><option>Rogue</option><option>Shaman</option><option>Warlock</option><option>Warrior</option></select></div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
@@ -612,7 +613,8 @@ tr:hover td{background:rgba(255,255,255,.013)}
   <div class="card" id="add-player-card" style="display:none">
     <div class="ct"><i class="ti ti-plus" style="color:var(--acc)"></i>Add Player Manually</div>
     <div class="frow">
-      <div class="fg" style="flex:1;min-width:110px"><span class="fl">Name</span><input id="np-name" placeholder="Character name"></div>
+      <div class="fg" style="min-width:90px"><span class="fl">First name</span><input id="np-first" placeholder="First"></div>
+      <div class="fg" style="min-width:90px"><span class="fl">Last name</span><input id="np-last" placeholder="Last (optional)"></div>
       <div class="fg"><span class="fl">Class</span><select id="np-cls" onchange="updateNPSpecs()"><option>Druid</option><option>Hunter</option><option>Mage</option><option>Paladin</option><option>Priest</option><option>Rogue</option><option>Shaman</option><option>Warlock</option><option>Warrior</option></select></div>
       <div class="fg"><span class="fl">Spec</span><select id="np-spec"></select></div>
       <div class="fg"><span class="fl">Role</span><select id="np-role"><option>Healer</option><option>Melee</option><option>Ranged</option><option>Tank</option></select></div>
@@ -628,6 +630,7 @@ tr:hover td{background:rgba(255,255,255,.013)}
     <label class="rtogl"><span class="tog sm" id="sw-alts" onclick="toggleRosterFilter('alts')"></span> Show alts</label>
     <label class="rtogl"><span class="tog sm" id="sw-active" onclick="toggleRosterFilter('active')"></span> Active raiders</label>
     <label class="rtogl"><span class="tog sm" id="sw-group" onclick="toggleRosterFilter('group')"></span> Group alts under main</label>
+    <label class="rtogl"><span class="tog sm sw-lastnames" onclick="toggleShowLastNames()"></span> Show last names</label>
     <div style="flex:1"></div>
     <button class="btn btn-s btn-sm" id="add-player-toggle" onclick="toggleAddPlayer()" style="display:none"><i class="ti ti-plus"></i>Add player</button>
   </div>
@@ -909,13 +912,26 @@ let VIEW=null; // 'rl' | 'participant' | 'guest' | 'officer'
 let CURRENT_USER=null; // roster player when signed in by name
 let rosterSortCol='name';let rosterSortDir=1;
 // Roster view switches
-let rosterPresOnly=false, rosterShowAlts=true, rosterShowActive=true, rosterGroupAlts=false;
+let rosterPresOnly=false, rosterShowAlts=true, rosterShowActive=true, rosterGroupAlts=true;
 function toggleRosterFilter(which){
   if(which==='pres') rosterPresOnly=!rosterPresOnly;
   else if(which==='alts') rosterShowAlts=!rosterShowAlts;
   else if(which==='active') rosterShowActive=!rosterShowActive;
   else if(which==='group') rosterGroupAlts=!rosterGroupAlts;
   renderRoster();
+}
+// ── Character names: first + last (WoW Forever). Full name stays the unique id;
+//    last names are hidden in overviews by default, toggled globally. ──
+let showLastNames=false;
+try{ showLastNames = localStorage.getItem('whaapp-showlastnames')==='1'; }catch(e){}
+function splitName(full){ const parts=String(full||'').trim().split(/\s+/); return {first:parts[0]||'', last:parts.slice(1).join(' ')}; }
+function dispName(name){ if(showLastNames) return name; const s=splitName(name); return s.first||name; }
+function toggleShowLastNames(){
+  showLastNames=!showLastNames;
+  try{ localStorage.setItem('whaapp-showlastnames', showLastNames?'1':'0'); }catch(e){}
+  // refresh the views that show names
+  renderRoster?.(); renderAttendance?.(); renderRoles?.(); renderProfiles?.(); renderBuffs?.(); renderQuests?.();
+  document.querySelectorAll('.sw-lastnames').forEach(t=>t.classList.toggle('on',showLastNames));
 }
 let appTab='pending';let srTab='pending';let stTab='overview';
 let applications=[];let specRequests=[];let raidSchedule=[];let reviews=[];
@@ -1077,7 +1093,7 @@ function renderQuests(){
       </div>
       ${q.desc?`<div style="font-size:11.5px;color:var(--t2);white-space:pre-wrap">${qesc(q.desc)}</div>`:''}
       ${q.reward?`<div style="font-size:11px;color:var(--gold)"><i class="ti ti-gift"></i> ${qesc(q.reward)}</div>`:''}
-      ${workers.length?`<div style="font-size:11px;color:var(--t2)"><i class="ti ti-user-check" style="color:var(--gre)"></i> Working on it: <span style="color:var(--t1)">${workers.map(n=>qesc(n)).join(', ')}</span></div>`:''}
+      ${workers.length?`<div style="font-size:11px;color:var(--t2)"><i class="ti ti-user-check" style="color:var(--gre)"></i> Working on it: <span style="color:var(--t1)">${workers.map(n=>qesc(dispName(n))).join(', ')}</span></div>`:''}
       <div style="margin-top:auto;padding-top:7px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap">
         <span style="font-size:10px;color:var(--t3)">${qesc(q.by||'—')}${q.date?' · '+fmtKey(q.date):''}</span>
         <div style="display:flex;gap:4px;flex-wrap:wrap">
@@ -1210,7 +1226,7 @@ function renderBuffs(){
     const shams=members.filter(n=>gp(n)?.cls==='Shaman');
     const t=buffAssign.totems[i]||{};
     return `<div style="background:var(--bg3);border-radius:var(--r);padding:8px 10px;margin-bottom:6px">
-      <div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:5px">Group ${i+1} ${shams.length?`· <span style="color:var(--t1)">${shams.join(', ')}</span>`:'<span style="color:var(--red)">· no Shaman</span>'}</div>
+      <div style="font-size:11px;font-weight:700;color:var(--t2);margin-bottom:5px">Group ${i+1} ${shams.length?`· <span style="color:var(--t1)">${shams.map(dispName).join(', ')}</span>`:'<span style="color:var(--red)">· no Shaman</span>'}</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${['air','earth','water','fire'].map(elm=>rl
           ?`<select onchange="setTotem(${i},'${elm}',this.value)" style="font-size:10px;width:auto"><option value="">${elm[0].toUpperCase()+elm.slice(1)} —</option>${TOTEM_OPTS[elm].map(x=>`<option ${t[elm]===x?'selected':''}>${x}</option>`).join('')}</select>`
@@ -1234,7 +1250,7 @@ function renderBuffs(){
       <div style="display:flex;gap:4px;flex-wrap:wrap;flex:1;align-items:center">
         ${skipped
           ? `<span class="badge" style="background:var(--bg2);color:var(--t3)">Skipped</span>`
-          : (assigned.length?assigned.map(n=>`<span class="badge" style="background:${cc}22;color:${cc};border:0.5px solid ${cc}66;display:inline-flex;align-items:center;gap:3px">${n}${rl?`<span onclick="removeClassBuff('${b.key}','${n}')" style="cursor:pointer;opacity:.7" title="Remove">✕</span>`:''}</span>`).join(''):`<span style="font-size:10px;color:var(--t3)">${rl?'Unassigned':'—'}</span>`)}
+          : (assigned.length?assigned.map(n=>`<span class="badge" style="background:${cc}22;color:${cc};border:0.5px solid ${cc}66;display:inline-flex;align-items:center;gap:3px" title="${n}">${dispName(n)}${rl?`<span onclick="removeClassBuff('${b.key}','${n}')" style="cursor:pointer;opacity:.7" title="Remove">✕</span>`:''}</span>`).join(''):`<span style="font-size:10px;color:var(--t3)">${rl?'Unassigned':'—'}</span>`)}
       </div>
       ${rl?`<div style="display:flex;gap:4px;align-items:center">
         ${skipped?'':`<select onchange="addClassBuff('${b.key}',this.value);this.value=''" style="font-size:10px;width:auto">
@@ -2466,8 +2482,8 @@ function pill(name,dim){
   const p=gp(name)||{cls:'',type:''};
   const c=CC[p.cls]||'#aaa';const b=CB[p.cls]||'rgba(100,100,100,.12)';
   const linkable=!!gp(name); // only roster members have a profile to open
-  const clk=linkable?` onclick="event.stopPropagation();gotoProfile('${name}')" title="View ${name}'s profile"`:'';
-  return`<span class="pill" style="background:${b};color:${c};border-color:${c}40;${dim?'opacity:.4':''}${linkable?';cursor:pointer':''}"${clk}>${name}</span>`;
+  const clk=linkable?` onclick="event.stopPropagation();gotoProfile('${name}')" title="${name}"`:` title="${name}"`;
+  return`<span class="pill" style="background:${b};color:${c};border-color:${c}40;${dim?'opacity:.4':''}${linkable?';cursor:pointer':''}"${clk}>${dispName(name)}</span>`;
 }
 function rtag(type){return`<span class="badge" style="background:${RB[type]||'#111'};color:${RC[type]||'#aaa'};border:0.5px solid ${(RC[type]||'#aaa')}30">${type}</span>`;}
 function ctag(cls){const c=CC[cls]||'#aaa';return`<span class="badge" style="background:${CB[cls]||'rgba(100,100,100,.12)'};color:${c};border:0.5px solid ${c}30">${cls}</span>`;}
@@ -4018,6 +4034,7 @@ function renderRoster(){
   document.getElementById('sw-alts')?.classList.toggle('on',rosterShowAlts);
   document.getElementById('sw-active')?.classList.toggle('on',rosterShowActive);
   document.getElementById('sw-group')?.classList.toggle('on',rosterGroupAlts);
+  document.querySelectorAll('.sw-lastnames').forEach(t=>t.classList.toggle('on',showLastNames));
   // populate class filter
   const clsSel=document.getElementById('rf-cls');
   if(clsSel&&clsSel.options.length<=1){['Warrior','Paladin','Hunter','Rogue','Priest','Shaman','Mage','Warlock','Druid'].forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;clsSel.appendChild(o);});}
@@ -4068,7 +4085,7 @@ function renderRoster(){
     <td>${isRL()?`<select style="font-size:11px;padding:2px 6px;width:auto;background:var(--bg3);border-color:var(--borderl);color:var(--t1)" onchange="setPlayerSpec('${p.name}','spec',this.value)">${(CLASS_SPECS[p.cls]||[p.spec]).map(s=>`<option value="${s}" ${s===p.spec?'selected':''}>${s}</option>`).join('')}</select>`:`<span style="font-size:11px;color:var(--t2)">${p.spec}</span>`}</td>
     <td>${(()=>{const rs={'Tank':'color:#e07060;background:rgba(200,80,60,.15);border-color:rgba(200,80,60,.4)','Mage Tank':'color:#e07060;background:rgba(200,80,60,.15);border-color:rgba(200,80,60,.4)','Healer':'color:#5DCAA5;background:rgba(26,158,114,.15);border-color:rgba(26,158,114,.4)','Melee':'color:#e09a65;background:rgba(200,120,65,.15);border-color:rgba(200,120,65,.4)','Ranged':'color:#6ab4e8;background:rgba(41,128,185,.15);border-color:rgba(41,128,185,.4)'};const s=rs[p.type]||'color:var(--t2);background:var(--bg3);border-color:var(--borderl)';return isRL()?`<select style="font-size:11px;padding:2px 9px;width:auto;border-radius:20px;font-weight:600;${s}" onchange="setPlayerRole('${p.name}',this.value)"><option ${p.type==='Healer'?'selected':''}>Healer</option><option ${p.type==='Melee'?'selected':''}>Melee</option><option ${p.type==='Ranged'?'selected':''}>Ranged</option><option ${p.type==='Tank'?'selected':''}>Tank</option></select>`:rtag(p.type);})()}</td>
     <td>${isRL()?`<select style="font-size:11px;padding:2px 6px;width:auto;background:var(--bg3);border-color:var(--borderl);color:var(--t3)" onchange="setPlayerSpec('${p.name}','flexSpec',this.value)"><option value="">—</option>${(CLASS_SPECS[p.cls]||[]).map(s=>`<option value="${s}" ${s===p.flexSpec?'selected':''}>${s}</option>`).join('')}</select>`:`<span style="font-size:11px;color:var(--t3)">${p.flexSpec||'—'}</span>`}</td>
-    <td>${(()=>{const m=getMainOf(p.name);return m?`<span class="badge" style="background:rgba(124,111,224,.12);color:var(--acc);border:0.5px solid rgba(124,111,224,.3);gap:4px"><i class="ti ti-user-share" style="font-size:10px"></i>Alt of ${m}</span>`:'<span style="color:var(--t3);font-size:11px">—</span>'})()}</td>
+    <td>${(()=>{const m=getMainOf(p.name);return m?`<span class="badge" style="background:rgba(124,111,224,.12);color:var(--acc);border:0.5px solid rgba(124,111,224,.3);gap:4px" title="Alt of ${m}"><i class="ti ti-user-share" style="font-size:10px"></i>Alt of ${dispName(m)}</span>`:'<span style="color:var(--t3);font-size:11px">—</span>'})()}</td>
     ${isRL()?`<td><button class="btn btn-sm" style="font-size:10px;padding:3px 7px" onclick="swapSpecs('${p.name}')" title="Swap main ↔ flex spec"><i class="ti ti-switch-horizontal"></i></button></td><td><button class="btn btn-sm" style="font-size:10px;background:var(--redd);border-color:rgba(192,57,43,.25);color:#e07b72" onclick="removePlayer('${p.name}')"><i class="ti ti-trash"></i></button></td>`:'<td style="display:none"></td><td style="display:none"></td>'}
   </tr>`).join('');
 }
@@ -4122,15 +4139,17 @@ function updateGSRole(){
   }
 }
 function submitGuildApp(){
-  const name=document.getElementById('gs-name').value.trim();
+  const first=document.getElementById('gs-first').value.trim();
+  const last=document.getElementById('gs-last').value.trim();
+  const name=(first+' '+last).trim();
   const cls=document.getElementById('gs-cls').value;
   const spec=document.getElementById('gs-spec').value;
   const role=document.getElementById('gs-role').value;
   const flex=document.getElementById('gs-flex').value;
   const profs=[document.getElementById('gs-prof1').value,document.getElementById('gs-prof2').value].filter((v,i,a)=>v&&a.indexOf(v)===i);
   const note=document.getElementById('gs-note').value.trim();
-  if(!name){document.getElementById('gs-name').style.borderColor='var(--red)';document.getElementById('gs-name').placeholder='Name required!';return;}
-  document.getElementById('gs-name').style.borderColor='';
+  if(!first){document.getElementById('gs-first').style.borderColor='var(--red)';document.getElementById('gs-first').placeholder='Required!';return;}
+  document.getElementById('gs-first').style.borderColor='';
   const alreadyInGs=ROSTER.find(p=>p.name.toLowerCase()===name.toLowerCase());
   if(alreadyInGs){
     document.getElementById('auth-signup-warn-msg').textContent=`${alreadyInGs.name} is already a We Have An App member. No application needed — use the login screen to sign in, or contact the Raid Leader.`;
@@ -4143,7 +4162,8 @@ function submitGuildApp(){
   saveApplications();
   updatePendingBadge();
   document.getElementById('auth-signup-success').style.display='block';
-  document.getElementById('gs-name').value='';
+  document.getElementById('gs-first').value='';
+  document.getElementById('gs-last').value='';
   document.getElementById('gs-note').value='';
 }
 function updateSigSpecs(){
@@ -4187,12 +4207,14 @@ function updateSigRole(){
   if(cls && spec) _refreshFlexOptions(cls, spec);
 }
 function addPlayerManual(){
-  const name=document.getElementById('np-name').value.trim();
-  if(!name){toast('Enter a name','err');return;}
-  if(ROSTER.find(p=>p.name===name)){toast('Player already exists','err');return;}
+  const first=document.getElementById('np-first').value.trim();
+  const last=document.getElementById('np-last').value.trim();
+  const name=(first+' '+last).trim();
+  if(!first){toast('Enter a first name','err');return;}
+  if(ROSTER.find(p=>p.name.toLowerCase()===name.toLowerCase())){toast('Player already exists','err');return;}
   ROSTER.push({name,cls:document.getElementById('np-cls').value,spec:document.getElementById('np-spec').value,flexSpec:document.getElementById('np-flex').value,type:document.getElementById('np-role').value,dispel:[],interrupt:0,present:true,resFrost:false,resNature:false,resFire:false});
   saveRoster();
-  document.getElementById('np-name').value='';
+  document.getElementById('np-first').value=''; document.getElementById('np-last').value='';
   renderRoster();toast(`${name} added to roster`,'ok');
 }
 function removePlayer(name){if(!isRL())return;if(!confirm(`Remove ${name} from roster?`))return;ROSTER=ROSTER.filter(p=>p.name!==name);saveRoster();renderRoster();toast(`${name} removed`,'ok');}
