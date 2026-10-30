@@ -1,4 +1,4 @@
-# We Have An App — Raid Manager
+# We Have An App - Raid Manager
 
 Raid management web app for the WoW guild **We Have An App** (formerly Boogalo): raid calendar and sign-ups, attendance, roster, groups and buff assignments, Quest Board, Guild Effort, profiles and raid strategy pages.
 
