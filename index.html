@@ -3143,7 +3143,7 @@ function renderNextRaidBar(){
   }else if(chars.length){
     const answered=chars.map(c=>[c,raidAnswer(r,c)]).filter(x=>x[1]);
     if(answered.length&&!_nrChange){
-      act=answered.map(([c,st])=>'<span class="nrb-s" style="color:'+ANSWER_UI[st].c+'">'+esc(splitName(c).first||c)+' '+nrPhrase(st)+'</span>').join('')+
+      act=answered.slice(0,1).map(([c,st])=>'<span class="nrb-s" style="color:'+ANSWER_UI[st].c+'">'+esc(splitName(c).first||c)+' '+nrPhrase(st)+'</span>').join('')+
         '<button type="button" class="btn-o" onclick="nrChange(true)">Change</button>';
     }else{
       act='<button type="button" class="btn btn-p"'+(chars.length>1?' aria-haspopup="menu" aria-expanded="false"':'')+' onclick="suOpen(this,'+rid+',\'ready\')">Sign up</button>'+
@@ -8646,7 +8646,10 @@ function signUpWithStatus(raidId, status, charName){
   if(!mine.includes(name)){toast('You can only sign up your own characters','warn');return;}
   const r=raidSchedule.find(x=>x.id===raidId);if(!r)return;
   if(!r.signupStatus)r.signupStatus={};
-  _clearPlayerFromRaid(r,name); // remove any prior status first
+  // One character per player per raid: answering with this one replaces any answer of their other characters
+  const conf=mine.find(c=>c!==name&&(r.confirmed||[]).includes(c));
+  if(conf){toast(conf+' is already confirmed for this raid. Ask the raid leader to remove that first.','warn');return;}
+  mine.forEach(c=>_clearPlayerFromRaid(r,c));
   if(status==='ready'){
     if(r.signedUp.length>=SIGNUP_POOL_MAX){toast('Sign-up queue is full','err');return;}
     r.signedUp.push(name);
@@ -8679,6 +8682,9 @@ function quickSignUp(raidId, name){
   if(r.signedUp.includes(name)||(r.signupStatus&&r.signupStatus[name])){toast(name+' already responded to this raid','err');return;}
   if(r.signedUp.length>=SIGNUP_POOL_MAX){toast('Sign-up queue is full','err');return;}
   if(!r.signupStatus)r.signupStatus={};
+  const conf=getMyChars().find(c=>c!==name&&(r.confirmed||[]).includes(c));
+  if(conf){toast(conf+' is already confirmed for this raid. Ask the raid leader to remove that first.','warn');return;}
+  getMyChars().forEach(c=>_clearPlayerFromRaid(r,c)); // one character per player per raid
   r.signedUp.push(name);
   saveRaids();renderRaids();renderCalendar();
   toast(name+' signed up for '+r.name+'!','ok');

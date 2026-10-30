@@ -20,13 +20,16 @@ First run only, in a second terminal:
 cd dev && npm run seed
 ```
 
-This loads made-up guild data in the **old** format (as if it came from today's live app) plus three demo logins:
+This loads made-up guild data in the **old** format (as if it came from today's live app) plus demo logins:
 
 | Character | Role | Password |
 |---|---|---|
-| Fate Bringer | Guild Leader | `password` |
-| Raidboss Demo | Raid Leader | `demo-pass-rl` |
+| Fate Bringer | Guild Leader | `whaapp-rl` |
+| Raidboss Demo | Raid Leader | `whaapp-rl` |
+| Brenna Vale | Officer | `whaapp-officer` |
 | Tom Ironfield | Member | — (signs in by name) |
+
+These are the old shared view keys, used as **local test passwords only** — they are public in the repo history, so real leaders must choose their own.
 
 Walkthrough:
 1. Sign in as Fate Bringer (Guild Leader) → Accounts (sidebar) → **Import data now**: copies the old-format data into the new layout.

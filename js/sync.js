@@ -161,6 +161,8 @@ function _rebuild(key){
   const n={}; c.nodes.forEach(x=>{ n[x]=_nodeData[x]; });
   applyFirebaseKey(key,c.fromNodes(n));
   _last[key]=_recordsJSON(c.toRecords(c.get()));
+  // the next-raid bar lists the player's characters, which come from the roster and alts
+  if(key==='alts'||key==='roster') try{ renderNextRaidBar?.(); }catch(e){}
 }
 function _listen(node){
   if(_listening[node]||!_fbDB) return;

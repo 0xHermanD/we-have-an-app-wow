@@ -15,8 +15,9 @@ const call = async (method, path, body) => {
 
 // Demo logins (test values for the local emulator only)
 export const DEMO_LOGINS = [
-  ['Raidboss Demo', 'rl', 'demo-pass-rl', 'Warrior', 'Protection', 'Tank'],
-  ['Fate Bringer', 'gl', 'password', 'Warlock', 'Affliction', 'Ranged'],
+  ['Raidboss Demo', 'rl', 'whaapp-rl', 'Warrior', 'Protection', 'Tank'],
+  ['Fate Bringer', 'gl', 'whaapp-rl', 'Warlock', 'Affliction', 'Ranged'],
+  ['Brenna Vale', 'officer', 'whaapp-officer', 'Priest', 'Holy', 'Healer'],
   ['Tom Ironfield', 'member', '-', 'Paladin', 'Holy', 'Healer'],
 ];
 
