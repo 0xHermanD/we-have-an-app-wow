@@ -1,4 +1,4 @@
-# We Have An App — improvement plan
+# We Have An App - improvement plan
 
 Goal: make the raid manager safe to use (real logins, a database that enforces who may change what), stop lost sign-ups, and clean up, without changing the no-build setup.
 
@@ -13,7 +13,7 @@ Goal: make the raid manager safe to use (real logins, a database that enforces w
 | Deploy source | Netlify deploys `jorverstappen-bit/boogalo-app` `master`; work arrives by PR from the fork `0xHermanD/we-have-an-app-wow`. |
 | Stack | Plain HTML/CSS/JS, no bundler. Dev-only tooling lives in `dev/` and never ships. |
 
-## Status — built on branch `accounts-and-security` (2026-10-30), tested locally, not live
+## Status - built on branch `accounts-and-security` (2026-10-30), tested locally, not live
 
 | Area | What changed | Checked |
 |---|---|---|
@@ -24,17 +24,17 @@ Goal: make the raid manager safe to use (real logins, a database that enforces w
 | One-time import | RL → Accounts → **Import data now** copies `whaapp/` into the new layout; the old data stays untouched. | Demo import: 11 characters, 2 raids, 1 quest, sign-ups and leave carried over. |
 | Environments | localhost / 127.0.0.1 → local emulators; Netlify branch deploys → staging (when configured); else production. | Local runs never touch live data. |
 | Backups | `dev/backup/backup.yml`: nightly export for a **private** repo. | Not run (needs a service-account key). |
-| Docs / leftovers | README, CLAUDE.md (no passwords), `dev/README.md`; old Boogalo names removed from `PREFERRED_RAID_GROUPS`. | — |
+| Docs / leftovers | README, CLAUDE.md (no passwords), `dev/README.md`; old Boogalo names removed from `PREFERRED_RAID_GROUPS`. | - |
 
 Behaviour changes the guild will notice:
-- Members sign in with just their name (so anyone can sign in as any member — by choice). Officers and leaders need a password. Guests can still browse.
+- Members sign in with just their name (so anyone can sign in as any member - by choice). Officers and leaders need a password. Guests can still browse.
 - Renaming a character is RL-only (members used to rename themselves).
 - Members can add alts that are new characters, not characters already on the roster; the RL links those.
 - The old Boogalo/pre-accounts data is readable by RL and officers only.
 
 Not done / deliberately left:
 - Old **reviews** and **spec request** code: no page shows them and they no longer sync; left in place (inert) rather than risk breaking something by deleting.
-- Not tested against real Firebase — only the local emulators. Go-live step 5 checks the hidden login address format (`…@whaapp.invalid`) before anything changes.
+- Not tested against real Firebase - only the local emulators. Go-live step 5 checks the hidden login address format (`…@whaapp.invalid`) before anything changes.
 - Optional later: Firebase App Check against application spam; a separate staging Firebase project; splitting more out of `index.html`.
 
 ## Go-live checklist (in this order, one evening)

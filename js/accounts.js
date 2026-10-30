@@ -56,9 +56,9 @@ function renderAccounts(fromListener){
     reqs.forEach(r=>{
       const name=charFromKey(r.char), p=gp(name), owned=owners[r.char];
       const notes=[];
-      if(r.kind==='join'&&!p) notes.push('new player — accepting their application in RL Review accepts this too');
+      if(r.kind==='join'&&!p) notes.push('new player - accepting their application in RL Review accepts this too');
       else if(!p) notes.push('not on the roster');
-      if(owned) notes.push('has a login already — accepting replaces its password');
+      if(owned) notes.push('has a login already - accepting replaces its password');
       if(perChar[r.char]>1) notes.push(perChar[r.char]+' requests for this character');
       const when=r.at?new Date(r.at).toLocaleString(undefined,{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'';
       html+=`<div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg3)">
@@ -77,7 +77,7 @@ function renderAccounts(fromListener){
   html+=`</div>`;
   // Logins per character
   html+=`<div class="card" style="margin-bottom:10px;font-size:13px;color:var(--t2)">
-    <b style="color:var(--t1)">${withLogin} of ${rows.length}</b> characters have a login. Members sign in by name; leaders with a password — a forgotten password is a new request you accept.</div>`;
+    <b style="color:var(--t1)">${withLogin} of ${rows.length}</b> characters have a login. Members sign in by name; leaders with a password - a forgotten password is a new request you accept.</div>`;
   html+=`<div class="card" style="padding:0;overflow-x:auto"><table><thead><tr><th>Character</th><th>Login</th><th>Role</th><th style="text-align:right">Actions</th></tr></thead><tbody>`;
   rows.forEach(n=>{
     const k=charKey(n), uid=owners[k], u=uid?users[uid]:null, p=gp(n);
@@ -206,8 +206,8 @@ function raidLeaderField(id,r){
     const opts=raidLeaderOptions();
     return `<select id="${esc(id)}" style="width:100%"><option value="">No leader yet</option>${opts.map(o=>`<option value="${esc(o.uid)}" ${o.uid===cur?'selected':''}>${esc(o.name)}</option>`).join('')}</select>`;
   }
-  const name=r?(r.leaderUid?(r.rl||'—'):'Not assigned yet'):(_role==='rl'?CURRENT_USER?.name:'Assigned by the Guild Leader');
-  return `<div id="${esc(id)}" style="height:36px;display:flex;align-items:center;color:var(--t2)">${esc(name||'—')}</div>`;
+  const name=r?(r.leaderUid?(r.rl||'-'):'Not assigned yet'):(_role==='rl'?CURRENT_USER?.name:'Assigned by the Guild Leader');
+  return `<div id="${esc(id)}" style="height:36px;display:flex;align-items:center;color:var(--t2)">${esc(name||'-')}</div>`;
 }
 // What the form decided: { leaderUid, rl (display name) }
 function readRaidLeader(id,r){

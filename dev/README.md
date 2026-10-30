@@ -1,4 +1,4 @@
-# Dev tooling (local only — never shipped)
+# Dev tooling (local only - never shipped)
 
 Everything here runs on your machine against the **Firebase emulators**: a local database and login server. Nothing touches the live guild data.
 
@@ -27,9 +27,9 @@ This loads made-up guild data in the **old** format (as if it came from today's 
 | Fate Bringer | Guild Leader | `whaapp-rl` |
 | Raidboss Demo | Raid Leader | `whaapp-rl` |
 | Brenna Vale | Officer | `whaapp-officer` |
-| Tom Ironfield | Member | — (signs in by name) |
+| Tom Ironfield | Member | - (signs in by name) |
 
-These are the old shared view keys, used as **local test passwords only** — they are public in the repo history, so real leaders must choose their own.
+These are the old shared view keys, used as **local test passwords only** - they are public in the repo history, so real leaders must choose their own.
 
 Walkthrough:
 1. Sign in as Fate Bringer (Guild Leader) → Accounts (sidebar) → **Import data now**: copies the old-format data into the new layout.
@@ -46,5 +46,5 @@ More demo logins: `npm run demo-user -- "First Last" <gl|rl|officer|member> <pas
 
 ## Other scripts
 
-- `npm run approve-first-gl -- "First Last"` — once, on the live site: makes the first Guild Leader by accepting their login request (see the go-live checklist in `../plan.md`).
-- `backup/backup.yml` — nightly backup job, for a **private** repo (instructions inside).
+- `npm run approve-first-gl -- "First Last"` - once, on the live site: makes the first Guild Leader by accepting their login request (see the go-live checklist in `../plan.md`).
+- `backup/backup.yml` - nightly backup job, for a **private** repo (instructions inside).

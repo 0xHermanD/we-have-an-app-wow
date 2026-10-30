@@ -1,4 +1,4 @@
-// Generates ../database.rules.json — the Realtime Database rules that decide who
+// Generates ../database.rules.json - the Realtime Database rules that decide who
 // may read and change what. Edit the rules here (comments and small helpers keep
 // them readable), then: npm run rules   (and npm run test:rules)
 //
@@ -38,7 +38,7 @@ const PROFILE_SAME = ['spec', 'flexSpec', 'type', 'timezone'].map(f => `newData.
 const OWN_OR_SAME = `${mine('$k')} || !${at('members/', E('$k'))}.exists() || newData.val() === data.val()`;
 
 // A member's first name-only sign-in: one update creates users/{uid} {main, role:'member', nameOnly:true},
-// owners/{char} and loginIndex/{char} — only for a character on the roster that has no login yet.
+// owners/{char} and loginIndex/{char} - only for a character on the roster that has no login yet.
 const SELF_NAME_LOGIN = `auth != null && auth.uid === $uid && !data.exists()
   && newData.child('role').val() === 'member' && newData.child('nameOnly').val() === true
   && newData.child('main').isString()
@@ -91,7 +91,7 @@ const rules = {
         $k: {
           // own characters: edit; a brand-new alt: create, in the same update that lists it under the member's own main
           // Staff add, remove and rename characters and keep attendance, but never change someone else's
-          // profile (spec, role, professions, resistances, timezone) — only the character's own player does.
+          // profile (spec, role, professions, resistances, timezone) - only the character's own player does.
           '.write': `(${STAFF} && (!data.exists() || !newData.exists() || (${PROFILE_SAME})))
             || (data.exists() && newData.exists() && ${mine('$k')})
             || (auth != null && !data.exists() && newData.exists() && ${atNew(2, 'alts/', E(MAIN), '/', E('$k'))}.exists())`,
@@ -177,7 +177,7 @@ const rules = {
         $key: { '.read': `$key !== 'weights' || ${STAFF}`, '.write': STAFF },
       },
     },
-    // Everything else — the pre-accounts data under whaapp/ and the old Boogalo data — is read-only, for staff.
+    // Everything else - the pre-accounts data under whaapp/ and the old Boogalo data - is read-only, for staff.
     $other: { '.read': STAFF, '.write': false },
   },
 };

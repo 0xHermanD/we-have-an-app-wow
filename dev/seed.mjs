@@ -49,7 +49,7 @@ const oldData = {
     raid('demoraid2', 'Onyxia', day(5), 40, { signedUp: ['Jory Pike'] }),
   ],
   applications: [{ id: 'demoapp1', name: 'Mira Quill', cls: 'Priest', spec: 'Shadow', role: 'Ranged', flexSpec: '', professions: ['Tailoring'],
-    note: "Hi! <img src=x onerror=alert('xss')> — this should show as plain text", status: 'pending', gs: null, gsNote: 'Check armory manually' }],
+    note: "Hi! <img src=x onerror=alert('xss')> - this should show as plain text", status: 'pending', gs: null, gsNote: 'Check armory manually' }],
   quests: [{ id: 'demoq1', title: 'Farm 20 Fire Resistance potions', desc: 'For Molten Core', reward: '50g', workers: [], by: 'Raidboss Demo', date: day(0), status: 'open' }],
   leaves: [{ id: 'demolv1', name: 'Kael Dunn', from: day(4), to: day(8), note: 'Holiday', by: 'Kael Dunn' }],
   guildEffort: { data: { 'Brenna Vale': { isGEMember: true, requests: [], note: '', lastContrib: '' } }, bank: {}, extra: [], profs: {} },
@@ -58,7 +58,7 @@ const oldData = {
 const force = process.argv.includes('--force');
 const existing = await call('GET', '', undefined).catch(() => null);
 if (existing && !force) {
-  console.log('The emulator already has data — nothing changed. Use `npm run seed -- --force` to wipe and reseed.');
+  console.log('The emulator already has data - nothing changed. Use `npm run seed -- --force` to wipe and reseed.');
   process.exit(0);
 }
 await call('PUT', '', { whaapp: oldData, roster: [{ name: 'Old Boogalo Player', cls: 'Warrior' }] });

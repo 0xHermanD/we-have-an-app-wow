@@ -21,7 +21,7 @@ const FB_ENVS={
 };
 // Local files and localhost use the emulators; Netlify branch deploys / deploy
 // previews ("branch--site.netlify.app") use staging once it is configured;
-// anything else — the live site, whatever its name — uses production.
+// anything else - the live site, whatever its name - uses production.
 function pickFbEnv(){
   const h=location.hostname;
   if(h===''||h==='localhost'||h==='127.0.0.1') return 'emulator';
@@ -41,13 +41,13 @@ try{
   if(cfg.apiKey){
     _fbAuth=firebase.auth();
     if(FB_ENV==='emulator') _fbAuth.useEmulator('http://127.0.0.1:9099',{disableWarnings:true});
-  } else console.warn('[FB] no apiKey for "'+FB_ENV+'" — sign-in is off until FB_ENVS.'+FB_ENV+'.apiKey is filled in (js/sync.js)');
+  } else console.warn('[FB] no apiKey for "'+FB_ENV+'" - sign-in is off until FB_ENVS.'+FB_ENV+'.apiKey is filled in (js/sync.js)');
   if(FB_ENV!=='prod') document.title='['+FB_ENV.toUpperCase()+'] '+document.title;
   console.log('[FB] SDK ready ('+FB_ENV+')');
 }catch(e){ console.warn('[FB] SDK init failed:',e.message); }
 
 // ── Character keys ────────────────────────────────────────────────
-// Database keys can't contain . # $ [ ] /  — percent-encode those (and %).
+// Database keys can't contain . # $ [ ] / - percent-encode those (and %).
 function charKey(name){ return String(name==null?'':name).trim().replace(/[.#$\[\]\/%]/g,c=>'%'+c.charCodeAt(0).toString(16).toUpperCase().padStart(2,'0')); }
 function charFromKey(k){ return String(k).replace(/%([0-9A-F]{2})/g,(_,h)=>String.fromCharCode(parseInt(h,16))); }
 
@@ -243,7 +243,7 @@ function fbSet(key,data){
   let last=_last[key];
   if(!last){
     if(createOnly) last=_last[key]={};
-    else{ console.warn('[FB] not loaded yet — save skipped:',key); return; }
+    else{ console.warn('[FB] not loaded yet - save skipped:',key); return; }
   }
   const next=_recordsJSON(c.toRecords(data));
   const writes={}; let skipped=0;
@@ -252,13 +252,13 @@ function fbSet(key,data){
   if(!createOnly) Object.keys(last).forEach(p=>{ if(!(p in next)) consider(p,null); });
   if(createOnly) Object.keys(writes).forEach(p=>{ last[p.slice(FB_NS.length)]=JSON.stringify(_clean(writes[p])); });
   if(skipped){
-    console.info('[FB] '+key+': '+skipped+' change(s) not yours to save — kept as they were');
+    console.info('[FB] '+key+': '+skipped+' change(s) not yours to save - kept as they were');
     if(!createOnly) setTimeout(()=>_rebuild(key),0); // put back what we didn't save
   }
   if(!Object.keys(writes).length) return;
   _fbDB.ref().update(writes).catch(e=>{
     console.warn('[FB] write refused:',key,e.message);
-    toast('Not saved — you don\'t have permission for that change','err');
+    toast('Not saved - you don\'t have permission for that change','err');
   });
 }
 

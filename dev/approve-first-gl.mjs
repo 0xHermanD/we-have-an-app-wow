@@ -14,7 +14,7 @@ const fb = (...args) => execFileSync('npx', ['firebase', ...args, '--project', P
 const requests = JSON.parse(fb('database:get', '/whaapp-v2/requests') || 'null') || {};
 const found = Object.entries(requests).filter(([, r]) => r && String(r.name).toLowerCase() === name.toLowerCase());
 if (found.length !== 1) {
-  console.error(found.length ? `${found.length} requests for "${name}" — decline the extra ones in the Firebase console first.` : `No login request for "${name}". Ask them to request one on the sign-in screen first.`);
+  console.error(found.length ? `${found.length} requests for "${name}" - decline the extra ones in the Firebase console first.` : `No login request for "${name}". Ask them to request one on the sign-in screen first.`);
   process.exit(1);
 }
 const [uid, r] = found[0];

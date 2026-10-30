@@ -1,4 +1,4 @@
-# Nightly backup of the live database — for a PRIVATE repository only.
+# Nightly backup of the live database - for a PRIVATE repository only.
 # Copy this file to .github/workflows/backup.yml in a new private GitHub repo
 # (never into the public app repos: backups contain player notes and applications).
 #

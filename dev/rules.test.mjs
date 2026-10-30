@@ -193,7 +193,7 @@ test('a member can\'t create roster entries that aren\'t their alts, or take exi
   await assertFails(update(r(as('new1')), { 'alts/Alice/X': 'X', 'members/X': { name: 'X' } }));
 });
 
-test('nobody changes someone else\'s profile — not even the Guild Leader', async () => {
+test('nobody changes someone else\'s profile - not even the Guild Leader', async () => {
   await env.withSecurityRulesDisabled(async ctx => {
     await set(ref(ctx.database(), NS + '/members/Bob'), { name: 'Bob', spec: 'Holy', type: 'Healer', present: true, professions: [{ name: 'Mining' }], resVals: { Fire: 50 } });
   });
